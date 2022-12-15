@@ -1,0 +1,400 @@
+---
+title: |
+    ![](Front_Page.jpg){width=6in}
+output: pdf_document
+geometry: "left = 2cm, right = 2cm, top = 2cm, bottom = 2cm"
+fontsize: 12pt
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+\begin{centering}
+\vspace{7cm}
+
+\begin{center} \Large \textbf{Acknowledgement}\end{center}
+We, the students of group-13 would like to express our profound gratitude towards *Dr. Dootika Vats*, our
+academic and project instructor for MTH208A (Data Science Lab I), for her
+guidance and constant supervision throughout the process and providing creative ideas and necessary 
+information regarding the project which led to the completion of this project.
+\newline\newline
+It has been a great learning experience and has also
+provided us with a practical insight of the theoretical knowledge
+gathered during the course lecture.
+
+\end{centering}
+
+\newpage
+
+\begin{center} \Large \textbf{Introduction}\end{center}
+
+
+Let's ask a basic question. **'What do we do when we have any queries?'** The query may relate to any topic, like education, job, extra curricular activites, travelling, movie etc. We may have some idea regarding the answer of our query. But, to be confident we always prefer to recheck our knowledge from somewhere, that may be from the person nearby or from 'Google'. If we don't know anything about the query then we definitely try to know the answer from somewhere. 
+Now a days internet is available in every hands. So, why should bother someone, when we can know the answer within just a few clicks. Then, We just search in google and answers of our questions are easily available from different websites. You may have a very stupid question or very technical question. Google always have some answers irrespective of whatever it is.
+\newline\newline
+We did the same thing while we thought of our course project and landed upon those technical sites and amidst we were going through it. We thought why cannot we just scrap this site over where we are searching for our answers. So, we decided to scrap those sites. In most of the times the answers are available on the question and answer (QnA) websites like *Quora*, *Stack-Exchange* etc. 
+
+Now what are these 'Network of QnA websites'? Let's know about three leading QnA websites briefly.
+\vspace{1cm}
+
+![](free-quora-logo.png){height=1in} ![](Stack_Overflow_logo.png){height=1cm} ![](Stack-Exchange.png){height=1in}
+
+\vspace{1cm}
++ **Quora** -> Quora is a social question-and-answer website. Here, users can help each other by answering each others' questions on a variety of topics. Quora was launched in 2009. According to wikipedia "as of 2020, the website was visited by 300 million users a month".
+
++ **Stack-Exchange** -> Stack-Exchange is itself a network of question-and-answer (Q&A) websites, where more technical questions and answers are discussed by the users. It as founded in 2009. According to wikipedia  "Stack Exchange publicly launched in January 2011 with 33 Web sites; it had 1.5 million users at the time, and it included advertising. At that time, it was compared to Quora, founded in 2009, which similarly specializes in expert answers".
+
++ **Stack-overflow** -> Stack-overflow is a site of the Stack-Exchange network, which mainly focuses on programming related topics. It as launched in 2008. According to wikipedia, "As of March 2021 Stack Overflow has over 14 million registered users and has received over 21 million questions and 31 million answers".
+
+\newpage
+
+\begin{center} \Large \textbf{Data Description}\end{center}
+
+*  **Primary Data:**
+To analyse the performance of the Network of question-and-answer(QnA) websites, we have collected our primary data from three leading QnA websites named Quora, Stack-exchange and Stack-overflow, on some relevant topics in various fields. We have collected top 10 queries asked by people along with their number of followers and number of answers for each selected topic from quora and top 15 queries asked along with their number of votes, number of answers, number of views, asked year and modified year for each selected topic from Stack-exchange and Stack-overflow each.
+  
+* **Obtaining the Data:**
+
+    i. **Data collection procedure:**
+    The data was collected from the official websites of Quora, Stack-exchange and Stack-overflow via web scraping in R programming language. Libraries like tidyverse and rvest and functions like html_elements() and html_attr() were used to scrape the required data from the webpage.
+    
+    Links to the official Websites -->
+    + *[Quora.com](https://www.quora.com/)*
+    + *[Stack-Exchange.com](https://stackexchange.com/)*
+    + *[Stack-Overflow.com](https://stackoverflow.com/)*
+    
+    ii. **Challenges faced to obtain the data:**
+    1. $\text{\underline{Html code of Quora written in Javascript}}$: The source code of the 'Quora' webpage is written in Javascript. So, the html_text() function was returning a large string of text from where getting the required amount of text was very troublesome.
+    
+    2. $\text{\underline{Very few number of datapoints}}$: If someone search for a particular topic (say, 'technology') in the selected QnA websites then they can see a numerous number of questions which goes on increasing as he/she scroll down through the webpage. But at the time of scraping questions we could scrape only top 10 questions for eaach topic from 'Quora' and top 15 questions for each topic from 'Stack-Exchange' and 'Stack-overflow' each which were very less number of datapoints to analyse.
+    
+    iii. **Steps taken to tackle the challenges:**
+    1. $\text{\underline{Using the library 'stringr'}}$: By observing that the queries asked in 'Quora' were of a similar pattern, the functions str_match_all() and str_locate() were used. Moreover, the gsub() and substr() functions were used to extract the final list of required questions.
+    
+    2. $\text{\underline{Number of datapoints}}$: To make the analysis stronger, a comparatively large number of relevent topics were considered so that the total number of datapoints for each QnA platform gets increased despite of the less number of datapoints for each topic.
+ 
+* **Relevent Features of the Data:**
+   + There are 170 data points in quora data set and 225 data points each in stack-exchange and stack-overflow data set.
+\newline
+   + Quora data set contains questions related to 17 topics named,
+\newline
+
+   ```{r, echo=FALSE, comment = NA}
+   load("quora.Rdata")
+   unique(quora$topic)
+   ```
+     and stack-exchange and stack-overflow contains questions related to 15 topics, same as quora data set except two topics "IIT Kanpur statistics" and "IIT Bombay statistics".
+\newline
+
+    + Quora data set contains 4 columns named 'questions', 'topics', 'followers' and 'answers'.
+\newline\newline
+    -> **Detailed Description of the columns**
+    1. $\text{\underline{questions}}$: It contains the questions asked from the relevant topics in quora.
+    2. $\text{\underline{topics}}$: It contains the relevant topic where is the question from.
+    3. $\text{\underline{followers}}$: It contains the number of people who follow a particular question.
+    4. $\text{\underline{answers}}$: It contains the number of answers available for each question.
+\newline
+    + Stack-exchange and Stack-overflow each contains 7 columns named 'questions', 'topics', 'votes', 'answers', 'views', 'asked year' and 'modified year'.
+\newline\newline
+    -> **Detailed Description of the columns**
+    1. Description of the 'questions' and 'topic' column is same as 'Quora'.
+    2. $\text{\underline{votes}}$: It contains the number of people who voted (upvote or downvote) for a question.
+    3. $\text{\underline{answers}}$: It contains the number of answers available for each question.
+    4. $\text{\underline{views}}$: It contains the number people who viewed the question.
+    5. $\text{\underline{asked year}}$: It contains the year in which a particular question was asked.
+    6. $\text{\underline{modified year}}$: It contains the year in which the question was last modified. 
+\newline\newline
+
+* **A Glimpse of the Data sets (Showing only first 6 data points)** 
+\newline
+\begin{center}
+**Quora Data Set**
+\end{center}
+```{r, echo=FALSE, comment = NA}
+load("quora.Rdata")
+head(quora)
+```
+
+\begin{center}
+**Stack-Exchnage Data Set**
+\end{center}
+```{r, echo=FALSE, comment = NA}
+load("stack_exchange.Rdata")
+head(stack_exchange)
+```
+
+\begin{center}
+**Stack-overflow Data Set**
+\end{center}
+```{r, echo=FALSE, comment = NA}
+load("stack_overflow.Rdata")
+head(stack_overflow)
+```
+\vspace{1cm}
+
+\begin{center} \Large \textbf{Possible Biases in the Data}\end{center}
+
+* Here we have considered some selective limited number of topics to compare different QnA websites. This will result bias in the data to some extent.
+
+* There may exist some confounding variable which affects the relationship between the number of followers and number of answers (E.g. asking year of the question) on which data as not available for the quora data set, which may result bias in the analysis.
+
+\newpage
+
+\begin{center} \Large \textbf{Interesting questions to ask from the data}\end{center}
+
+ 1. Which topic is more popular (or less popular) throughout different QnA websites?
+ 2. Is there any relationship between followers and answers? Is there any discrepency?
+ 3. Which coding languages have more followers/votes?
+ 5. Which QnA platform is the best to ask the questions?
+
+\begin{center} \Large \textbf{Important Visualizations}\end{center}
+ 
+* **Scatterplot of answers vs followers from Quora Data set:**
+\newline
+In general, if most of the people wants to know the answer of a particular question then they follow that question in 'Quora' so that they get a notification as soon as some solution to that question appears. Now, as the number of followers increases, the question reaches out to more people and the chance of the question being answered increases. Let's try to visualize this through the following scatterplots,
+\newline
+
+\begin{center}\textbf{$\text{\underline{Scatterplot of answers vs followers}}$}\end{center}
+```{r, echo=FALSE, comment = NA,  fig.height=6, fig.width=8, fig.align='center'}
+par(mfrow = c(1,2))
+          plot(quora$followers, quora$answers, xlab = "Number of followers", ylab = "Number of answers", pch = 16)
+          abline(lm(quora$answers ~ quora$followers))
+          topic <- as.factor(quora$topic)
+          plot(quora$followers, quora$answers, xlab = "Number of followers", ylab = "Number of answers (Topicwise)", col = topic, pch = 16)
+          topic1 <- character()
+          for(i in 1:length(levels(topic)))
+          {
+            level <- levels(topic)[i]
+            foo <- subset(quora, quora$topic == level)
+            abline(lm(foo$answers ~ foo$followers), col = i)
+            if(coefficients(lm(foo$answers ~ foo$followers))[2] <= 0)
+            {
+              topic1 <- c(topic1, levels(topic)[i])
+            }
+          }
+          topic1 <- as.factor(topic1)
+          legend("topleft", col = topic1, lty = 2,
+                 legend = topic1,
+                 title = "Topics with Negative slope")
+```
+Clearly, from the first plot we can observe that the number of answers and the number of followers are positively correlated (General trend). But, if we do the plot topic wise then for 4 topics the relation between the number of answers and the number of followers are negatively correlated. Specially, c++ which is a very popular coding language, has the estimated regression line with a slope of very high negative value. Why this unnatural behaviour?
+\newline\newline
+Now, 'Quora' is a general platform to ask questions. So, the reason may be c++ being a very basic and important programming language most people want to learn it and that's why they have many questions but they don't know the answers of them which results in decreasing number of answers to the questions as the number of followers increases.
+\vspace{1cm}
+
+* **Line diagram of average number of votes, views and answers per topic for Stack-Exchange and Stack-overflow Data Set:**
+\newline
+Stack-Exchange and Stack-overflow are more technical sites. So, we have plotted the average number of votes, views and answers per coding topics (python, java etc.) for both the platforms for comparison purpose,
+\newline
+
+\begin{center}\textbf{$\text{\underline{Stack-Exchange}}$}\end{center}
+```{r, echo=FALSE, comment = NA,  fig.height=6, fig.width=8, fig.align='center'}
+  library(ggplot2)
+  topic <- c("python", "c++", "java", "fortran", "matlab")
+  avg_views <- numeric(length = length(topic))
+  avg_votes <- numeric(length = length(topic))
+  avg_answers <- numeric(length = length(topic))
+  for(i in 1:length(topic))  
+  {
+    avg_views[i] <- mean(na.omit(stack_exchange[stack_exchange$topic %in% topic[i],]$views))
+    avg_votes[i] <- mean(na.omit(stack_exchange[stack_exchange$topic %in% topic[i],]$votes))
+    avg_answers[i] <- mean(na.omit(stack_exchange[stack_exchange$topic %in% topic[i],]$answers))
+  }
+  data <- data.frame(Topic = rep(topic, 3), Name = c(rep("Log of avg_views", length(topic)), rep("avg_votes", length(topic)), rep("avg_answers", length(topic))), Value = c(log(avg_views), avg_votes, avg_answers))  
+  ggplot(data, aes(x = Topic, y = Value, group = Name)) +
+    geom_line(aes(color = Name)) +
+    geom_point(aes(color = Name)) +
+            labs(x = 'Topics',
+                 y = 'Average Numbers',
+                 title = 'Average number of answers, votes and views per topic') +
+    theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+\newpage
+
+\begin{center}\textbf{$\text{\underline{Stack-overflow}}$}\end{center}
+```{r, echo=FALSE, comment = NA,  fig.height=6, fig.width=8, fig.align='center'}
+  library(ggplot2)
+  topic <- c("python", "c++", "java", "fortran", "matlab")
+  avg_views <- numeric(length = length(topic))
+  avg_votes <- numeric(length = length(topic))
+  avg_answers <- numeric(length = length(topic))
+  for(i in 1:length(topic))  
+  {
+    avg_views[i] <- mean(na.omit(stack_overflow[stack_overflow$topic %in% topic[i],]$views))
+    avg_votes[i] <- mean(na.omit(stack_overflow[stack_overflow$topic %in% topic[i],]$votes))
+    avg_answers[i] <- mean(na.omit(stack_overflow[stack_overflow$topic %in% topic[i],]$answers))
+  }
+  data <- data.frame(Topic = rep(topic, 3), Name = c(rep("Log of avg_views", length(topic)), rep("Log of avg_votes", length(topic)), rep("avg_answers", length(topic))), Value = c(log(avg_views), log(avg_votes), avg_answers))  
+  ggplot(data, aes(x = Topic, y = Value, group = Name)) +
+    geom_line(aes(color = Name)) +
+    geom_point(aes(color = Name)) +
+            labs(x = 'Topics',
+                 y = 'Average Numbers',
+                 title = 'Average number of answers, votes and views per topic') +
+    theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+\vspace{1cm}
+
+Here, we have scaled down the attributes by taking log() for comparison purpose.
+\newline\newline
+Here also, though the average number of views and votes for the c++ language are comparatively larger than the rest of the languages, but still the average number of answers are very less in that comparison. This strengthens our observation in the previous visualization that **c++** being a very **basic and important programming language** most people want to learn it and that's why they have many questions but they don't know the answers.
+
+Also, we can observe that python programming language may be in most demand now a days with a huge number of views and votes to the questions. 
+\newline
+
+\newpage
+
+* **Pie chart showing followers/views by topics**
+\newline
+
+\vspace{2cm}
+
+\begin{center}\textbf{$\text{\underline{Quora}}$}\end{center}
+![](Quora_pie.png){width=10%,height=10%}
+\vspace{2cm}
+
+
+We know, Quora is a social QnA (Question and Answer) website where people ask questions related to every field. Still, python questions have maximum number of followers compared to other topics like music, movie, food etc. From this we can guess the popularity of the 'Python' programming language.
+\newline\newline
+Whereas, Stack-Exchange and Stack-overflow being more technical websites has obviously maximum number of views for the python programming language. We can visualize those through the following plots,
+
+
+\newpage
+
+\begin{center}\textbf{$\text{\underline{Stack-Exchange}}$}\end{center}
+![](Stack_exchange_pie.png){width=10%,height=10%}
+\vspace{2cm}
+
+\begin{center}\textbf{$\text{\underline{Stack-overflow}}$}\end{center}
+![](Stack_overflow_pie.png){width=10%,height=10%}
+
+\newpage
+
+* **Boxplot showing number of followers/views grouped by topics:**
+
+\begin{center}\textbf{$\text{\underline{Quora}}$}\end{center}
+```{r, echo=FALSE, comment = NA,  fig.height=3.5, fig.width=6, fig.align='center'}
+  topic <- c("python", "c++", "java", "fortran", "matlab")
+          dat2 <- quora[quora$topic %in% topic,]
+          g <- ggplot(dat2, aes(topic, followers))
+          g + geom_boxplot(varwidth=T, fill="plum") + 
+            theme(axis.text.x = element_text(angle=65, vjust=0.6)) +
+            labs(title="Box plot", 
+                 subtitle="Number of followers grouped by Topic",
+                 x="Topic",
+                 y="Number of followers")
+```
+From the plot it is clear that, though python has on an average most number of followers but there is more variability in the number of followers compared to the other programming languages i.e. some questions have very less number of followers and some have very large number of followers.
+
+\begin{center}\textbf{$\text{\underline{Stack-overflow}}$}\end{center}
+```{r, echo=FALSE, comment = NA,  fig.height=3.5, fig.width=6, fig.align='center'}
+  topic <- c("python", "c++", "java", "fortran", "matlab")
+          dat2 <- stack_overflow[stack_overflow$topic %in% topic,]
+          g <- ggplot(dat2, aes(topic, views))
+          g + geom_boxplot(varwidth=T, fill="plum") + 
+            theme(axis.text.x = element_text(angle=65, vjust=0.6)) +
+            labs(title="Box plot", 
+                 subtitle="Number of views grouped by Topic",
+                 x="Topic",
+                 y="Number of views")
+```
+Stack-overflow being a more coding related question answer platform is showing a more or less similar pattern in 'Java' and 'Python'.
+
+\newpage
+
+* **Comparative study between the three Question and Answer websites:**
+\newline
+
+The three 'Question and Answer' websites 'Quora', 'Stack-exchange' and 'Stack-overflow' has different types of users. Quora is a more general site. Whereas, Stack-exchange and Stack-overflow are more technical sites. So, we can't directly compare these websites in terms of any of the available variables. Rather, we can compare these QnA sites in terms of the number of answer per follower, being the ratio of two such variables (It becomes unit free).
+\newline\newline
+(In quora, for being a follower of a question you have to press the follow button. This is somewhat similar of pressing the upvote (/downvote) button for a question in Stack-exchange and Stack-overflow. That's why we have selected the 'votes' column from the stack-exchange data set (Rather than number of views) in parallel to the 'followers' column in the quora data set.)
+\newline\newline
+To compare the performance of different Question and Answer platforms we have plotted vertical bars for each site where the number of answer per follower is plotted on the y-axis.
+
+```{r, echo=FALSE, comment = NA,  fig.height=5, fig.width=6, fig.align='center'}
+  rate_quora <- na.omit(quora$answers/quora$followers)
+            rate_stack_exchange <- stack_exchange$answers/stack_exchange$votes
+            rate_stack_exchange <- rate_stack_exchange[!is.na(rate_stack_exchange) & !is.infinite(rate_stack_exchange)]
+            rate_stack_overflow <- na.omit(stack_overflow$answers/stack_overflow$votes)
+            rate_stack_overflow <- rate_stack_overflow[!is.na(rate_stack_overflow) & !is.infinite(rate_stack_overflow)]
+            avg1 <- mean(rate_quora)
+            avg2 <- mean(rate_stack_exchange)
+            avg3 <- mean(rate_stack_overflow)
+            barplot(c(avg1, avg2, avg3), names.arg = c("Quora", "Stack-exchange", "Stack-overflow"), ylim = 0:1, xlab = "Different platforms", ylab = "average number of answer per follower", main = 'Comparison between different platforms', col = "grey")
+          
+```
+
+It seems that Quora is the best site to ask a question regarding any topic as the number of answer per follower is the largest for quora. So, if we ask our question in quora, then we will have more number of answers to our question from which we can select the desired one.
+
+Now, we will repeat the same plot where the bars are grouped by topics,
+
+```{r, echo=FALSE, comment = NA,  fig.height=5, fig.width=6, fig.align='center'}
+  topic <- unique(stack_exchange$topic)
+          rate_quora<- numeric(length = length(topic))
+          rate_stack_exchange <- numeric(length = length(topic))
+          rate_stack_overflow <- numeric(length = length(topic))
+          for(i in 1:length(topic))
+          {
+            rate_quora[i] <- mean(na.omit((quora[quora$topic %in% topic[i],]$answers)/(quora[quora$topic %in% topic[i],]$followers)))
+            vec.exchange <- ((stack_exchange[stack_exchange$topic %in% topic[i],]$answers)/(stack_exchange[stack_exchange$topic %in% topic[i],]$votes))
+            rate_stack_exchange[i] <- mean(vec.exchange[!is.na(vec.exchange) & !is.infinite(vec.exchange)])
+            vec.overflow <- ((stack_overflow[stack_overflow$topic %in% topic[i],]$answers)/(stack_overflow[stack_overflow$topic %in% topic[i],]$votes))
+            rate_stack_overflow[i] <- mean(vec.overflow[!is.na(vec.overflow) & !is.infinite(vec.overflow)])
+          }
+          data <- data.frame(Topics = rep(topic, 3), Platforms = c(rep("Quora", length(topic)), rep("Stack-exchange", length(topic)), rep("Stack-overflow", length(topic))), Value = c(rate_quora, rate_stack_exchange, rate_stack_overflow))  
+        
+          ggplot(data, aes(fill=Platforms, y=Value, x=Topics)) + 
+            geom_bar(position="dodge", stat="identity") +
+            labs(y = "Average number of answer per follower",
+                 title = 'Grouped barchart',
+                 subtitle = 'Comparison between different platforms (Topicwise)') +
+            theme(axis.text.x = element_text(angle = 60, hjust = 1))      
+```
+\vspace{1cm}
+
+Now, it is clear that the average number of answer per follower is largest for quora for all the topics except 'java', 'matlab', 'python', 'science' and 'technology'. For these topics Stack-exchange has the most average number of answers per follower. This is quiet obvious as, these topics are more technical topics than the rest of the other topics.
+\newline\newline
+Clearly, this plot rejects our previous hypothesis that 'Quora' may be the best place to ask any type of questions regarding any topic.
+\newline\newline
+Hence, we may infer that for general topics 'Quora' is the best platfrom to ask questions. Whereas, for the technical or coding topics 'Stack-exchange' and 'Stack-overflow' are the best to use.
+
+\newpage
+
+\begin{center} \Large \textbf{R Shiny App}\end{center}
+
+* The side panel of the R shiny consists of selections of QnA platforms. Then multiple group check boxes are provided for 17 topics. Also, there are some conditional panel based on the selected dataset.
+
+* Corresponding to the user selected topics, various images will load on the main panel which are explained thoroughly in the report. 
+
+* For the comparative study of the three QnA websites the user have to select the 'All' option in the dataset.
+
+\vspace{2cm}
+
+\begin{center} \Large \textbf{Conclusion}\end{center}
+
++ **c++** being a very **basic and important programming language** most people want to learn it and that's why they have many questions but they don't know the answers.
+
++ **Python programming language** is the most popular coding language (may be popular than other topics also) now a days.
+
++ For general topics (movie, music etc.) **'Quora'** is the best platfrom to ask questions. Whereas, for the technical or coding topics **'Stack-exchange'** and **'Stack-overflow'** are the best to use.
+
+\vspace{2cm}
+
+\begin{center} \Large \textbf{References}\end{center}
+
++ https://en.wikipedia.org/wiki/Quora
+
++ https://en.wikipedia.org/wiki/Stack_Exchange
+
++ https://en.wikipedia.org/wiki/Stack_Overflow
+
++ https://shiny.rstudio.com/articles/layout-guide.html
+
++ https://plotly.com/r/pie-charts/
+
++ https://r-graph-gallery.com/48-grouped-barplot-with-ggplot2.html
+
++ https://rmarkdown.rstudio.com/
